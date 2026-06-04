@@ -7,6 +7,8 @@
 
 const express = require('express');
 const tenantRoutes = require('./tenants');
+const authRoutes = require('./auth');
+const walletRoutes = require('./wallets');
 
 const router = express.Router();
 
@@ -20,11 +22,11 @@ router.get('/health', (req, res) => {
   });
 });
 
-router.use('/tenants', tenantRoutes);
+router.use('/tenants',  tenantRoutes);
+router.use('/auth',     authRoutes);
+router.use('/wallets',  walletRoutes);
 
-// Placeholder mounts for Steps 2–4 (wired in as built)
-// router.use('/auth',         authRoutes);
-// router.use('/wallets',      walletRoutes);
-// router.use('/transactions', transactionRoutes);
+// Step 3: aggregation + recurring routes (coming next)
+// router.use('/reports', reportRoutes);
 
 module.exports = router;
