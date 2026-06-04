@@ -13,6 +13,7 @@ const config = require('./config/env');
 const { connect: connectDB } = require('./config/database');
 const { createApp } = require('./app');
 const logger = require('./utils/logger');
+const { startWorker, stopWorker } = require('./workers/recurringWorker');
 
 // ── Uncaught Exception Guard ──────────────────────────────────────────────
 process.on('uncaughtException', (err) => {
@@ -34,6 +35,9 @@ const start = async () => {
   const server = app.listen(config.port, () => {
     logger.info(`[Server] Running in ${config.env} mode on port ${config.port}`);
     logger.info(`[Server] API base: http://localhost:${config.port}/api/v1`);
+
+    // 4. Start recurring expense background worker
+    startWorker();
   });
 
   // ── Unhandled Rejection Guard ──────────────────────────────────────────
@@ -42,6 +46,7 @@ const start = async () => {
       message: err.message,
       stack: err.stack,
     });
+    stopWorker();
     server.close(() => {
       process.exit(1);
     });

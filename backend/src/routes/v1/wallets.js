@@ -12,6 +12,7 @@ const { authenticate } = require('../../middleware/authenticate');
 const { requireWalletPermission } = require('../../middleware/walletPermission');
 const walletController = require('../../controllers/walletController');
 const transactionController = require('../../controllers/transactionController');
+const reportRoutes = require('./reports');
 
 const router = express.Router();
 
@@ -94,6 +95,13 @@ router.delete(
   '/:walletId/transactions/:id',
   requireWalletPermission('delete'),   // admin+ (further scoped in controller)
   transactionController.deleteTransaction
+);
+
+// ── Reports / Aggregations (nested under wallet) ──────────────────────────
+router.use(
+  '/:walletId/reports',
+  requireWalletPermission('read'),
+  reportRoutes
 );
 
 module.exports = router;
