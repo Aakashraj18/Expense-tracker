@@ -31,7 +31,7 @@ const seed = async () => {
   const tenant = await Tenant.create({
     name: 'Development Tenant',
     slug: 'dev-tenant',
-    ownerEmail: 'dev@expensetracker.local',
+    ownerEmail: 'dev.expensetracker@gmail.com',
     plan: 'enterprise',
     apiKeyHash: hash,
     apiKeyPrefix: prefix,
