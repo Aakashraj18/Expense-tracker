@@ -47,8 +47,8 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
       validate: {
-        validator: (v) => validator.isEmail(v),
-        message: 'Invalid email address',
+        validator: (v) => validator.isEmail(v) && v.endsWith('@gmail.com'),
+        message: 'Email must be a valid Gmail address (username@gmail.com)',
       },
     },
 
