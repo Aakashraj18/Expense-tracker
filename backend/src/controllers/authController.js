@@ -88,6 +88,10 @@ exports.register = async (req, res, next) => {
       return next(new AppError('Password must be at least 8 characters.', 422, 'WEAK_PASSWORD'));
     }
 
+    if (!email.endsWith('@gmail.com')) {
+      return next(new AppError('Email must be a Gmail address (username@gmail.com).', 422, 'INVALID_EMAIL_FORMAT'));
+    }
+
     // Check for duplicate email within this tenant (before session)
     const existing = await User.findOne({ tenantId: req.tenant._id, email });
     if (existing) {
