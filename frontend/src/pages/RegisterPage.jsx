@@ -17,6 +17,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (form.password.length < 8) return setError('Password must be at least 8 characters');
+    if (!form.email.endsWith('@gmail.com')) return setError('Email must be a Gmail address (username@gmail.com)');
     setLoading(true);
     setError('');
     try {
@@ -66,7 +67,7 @@ export default function RegisterPage() {
 
             <div>
               <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Email</label>
-              <input type="email" value={form.email} onChange={set('email')} placeholder="you@example.com"
+              <input type="email" value={form.email} onChange={set('email')} placeholder="username@gmail.com"
                 className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground outline-none focus:border-primary" required />
             </div>
 
