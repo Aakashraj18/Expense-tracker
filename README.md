@@ -19,6 +19,9 @@ This repo is organized as a monorepo with separate frontend and backend applicat
 - Role-based access control for wallets and members
 - Production-ready backend middleware for security, logging, and rate limiting
 
+## Live Link
+- https://expense-tracker-six-sage-47.vercel.app
+
 ## Tech stack
 
 ### Frontend
