@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 const API_KEY = import.meta.env.VITE_API_KEY || '';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '/api/v1';
 
 const api = axios.create({
-  baseURL: '/api/v1',
+  baseURL: BACKEND_URL,
   headers: {
     'Content-Type': 'application/json',
     'X-API-Key': API_KEY,
@@ -29,7 +30,7 @@ api.interceptors.response.use(
       const refreshToken = localStorage.getItem('refreshToken');
       if (refreshToken) {
         try {
-          const { data } = await axios.post('/api/v1/auth/refresh', { refreshToken }, {
+          const { data } = await axios.post(`${BACKEND_URL}/auth/refresh`, { refreshToken }, {
             headers: { 'X-API-Key': API_KEY },
           });
           localStorage.setItem('accessToken', data.data.accessToken);
