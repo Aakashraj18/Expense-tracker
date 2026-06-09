@@ -32,7 +32,7 @@ const createApp = () => {
     cors({
       origin: config.isDev ? '*' : process.env.ALLOWED_ORIGINS?.split(','),
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key', 'X-Idempotency-Key'],
       credentials: true,
     })
   );
