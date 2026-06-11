@@ -1,4 +1,5 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { formatCurrency } from '../../lib/utils';
 
 const COLORS = [
   '#6366f1', '#8b5cf6', '#ec4899', '#f59e0b',

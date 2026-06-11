@@ -11,6 +11,7 @@ export function formatCurrency(amount, currency, includeDecimals = true) {
     return new Intl.NumberFormat(undefined, {
       style: 'currency',
       currency: safeCurrency,
+      currencyDisplay: 'narrowSymbol',
       minimumFractionDigits: includeDecimals ? 2 : 0,
       maximumFractionDigits: includeDecimals ? 2 : 0,
     }).format(amount || 0);
