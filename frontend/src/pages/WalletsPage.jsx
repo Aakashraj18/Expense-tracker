@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useWallets } from '../context/WalletContext';
 import api from '../lib/api';
+import { formatCurrency } from '../lib/utils';
 import { Wallet, Plus, Users, X } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -118,7 +119,7 @@ export default function WalletsPage() {
             </div>
             {w.monthlyBudget > 0 && (
               <p className="mt-2 text-xs text-muted-foreground">
-                Budget: ${Number(w.monthlyBudget).toLocaleString()}/mo
+                Budget: {formatCurrency(w.monthlyBudget, w.currency, false)}/mo
               </p>
             )}
             <div className="mt-3 flex items-center gap-2 text-[11px] text-muted-foreground">

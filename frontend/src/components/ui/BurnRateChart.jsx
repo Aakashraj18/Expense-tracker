@@ -1,8 +1,9 @@
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
+import { formatCurrency } from '../../lib/utils';
 
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload, label, currency = 'INR' }) => {
   if (!active || !payload) return null;
   return (
     <div className="rounded-lg border border-border bg-card px-4 py-3 shadow-xl">
@@ -12,7 +13,7 @@ const CustomTooltip = ({ active, payload, label }) => {
           <span className="h-2 w-2 rounded-full" style={{ backgroundColor: entry.color }} />
           <span className="text-muted-foreground">{entry.name}:</span>
           <span className="font-semibold text-foreground">
-            ${Number(entry.value).toLocaleString()}
+            {formatCurrency(entry.value, currency)}
           </span>
         </div>
       ))}
@@ -20,7 +21,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   );
 };
 
-export default function BurnRateChart({ data = [] }) {
+export default function BurnRateChart({ data = [], currency = 'INR' }) {
   if (!data.length) {
     return (
       <div className="flex h-64 items-center justify-center text-sm text-muted-foreground">
@@ -55,9 +56,12 @@ export default function BurnRateChart({ data = [] }) {
             tick={{ fill: '#9ca3af', fontSize: 11 }}
             tickLine={false}
             axisLine={false}
-            tickFormatter={(v) => `$${v >= 1000 ? `${(v / 1000).toFixed(1)}k` : v}`}
+            tickFormatter={(v) => {
+              if (v >= 1000) return `${formatCurrency(v / 1000, currency, false)}k`;
+              return formatCurrency(v, currency, false);
+            }}
           />
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip content={<CustomTooltip currency={currency} />} />
           <Legend
             iconType="circle"
             iconSize={8}

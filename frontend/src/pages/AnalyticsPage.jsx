@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useWallets } from '../context/WalletContext';
 import api from '../lib/api';
+import { formatCurrency } from '../lib/utils';
 import BurnRateChart from '../components/ui/BurnRateChart';
 import CategoryPieChart from '../components/ui/CategoryPieChart';
 import BudgetMeter from '../components/ui/BudgetMeter';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-function MerchantBar({ data = [] }) {
+function MerchantBar({ data = [], activeWallet }) {
   if (!data.length) {
     return <p className="text-sm text-muted-foreground">No merchant data</p>;
   }
@@ -17,7 +18,10 @@ function MerchantBar({ data = [] }) {
         <XAxis
           type="number"
           tick={{ fill: '#9ca3af', fontSize: 11 }}
-          tickFormatter={(v) => `$${v >= 1000 ? `${(v / 1000).toFixed(1)}k` : v}`}
+          tickFormatter={(v) => {
+            if (v >= 1000) return `${formatCurrency(v / 1000, activeWallet?.currency, false)}k`;
+            return formatCurrency(v, activeWallet?.currency, false);
+          }}
           axisLine={false}
         />
         <YAxis
@@ -34,7 +38,7 @@ function MerchantBar({ data = [] }) {
             backgroundColor: '#1e212b', border: '1px solid #2e3440',
             borderRadius: '8px', fontSize: '12px', color: '#f8fafc',
           }}
-          formatter={(v) => [`$${Number(v).toLocaleString()}`, 'Spent']}
+          formatter={(v) => [formatCurrency(v, activeWallet?.currency), 'Spent']}
         />
         <Bar dataKey="total" fill="url(#barGradient)" radius={[0, 6, 6, 0]} barSize={20}>
           <defs>
@@ -125,16 +129,16 @@ export default function AnalyticsPage() {
       ) : (
         <>
           <div className="grid gap-6 lg:grid-cols-2">
-            <BurnRateChart data={data.trend} />
-            <CategoryPieChart data={data.categories} />
+            <BurnRateChart data={data.trend} currency={activeWallet?.currency} />
+            <CategoryPieChart data={data.categories} currency={activeWallet?.currency} />
           </div>
 
           <div className="grid gap-6 lg:grid-cols-2">
             <div className="rounded-xl border border-border bg-card p-5">
               <h3 className="mb-4 text-sm font-semibold text-foreground">Top Merchants</h3>
-              <MerchantBar data={data.merchants} />
+              <MerchantBar data={data.merchants} activeWallet={activeWallet} />
             </div>
-            <BudgetMeter budget={data.budget} />
+            <BudgetMeter budget={data.budget} currency={activeWallet?.currency} />
           </div>
         </>
       )}

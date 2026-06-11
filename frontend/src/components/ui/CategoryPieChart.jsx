@@ -13,14 +13,14 @@ const CustomTooltip = ({ active, payload }) => {
     <div className="rounded-lg border border-border bg-card px-4 py-3 shadow-xl">
       <p className="text-sm font-semibold text-foreground">{d.category}</p>
       <p className="text-xs text-muted-foreground">
-        ${Number(d.total).toLocaleString()} · {d.percentage}%
+        {formatCurrency(d.total, currency, false)} · {d.percentage}%
       </p>
       <p className="text-[11px] text-muted-foreground">{d.count} transactions</p>
     </div>
   );
 };
 
-export default function CategoryPieChart({ data = [] }) {
+export default function CategoryPieChart({ data = [], currency = 'INR' }) {
   if (!data.length) {
     return (
       <div className="flex h-64 items-center justify-center text-sm text-muted-foreground">
@@ -50,7 +50,7 @@ export default function CategoryPieChart({ data = [] }) {
                 <Cell key={i} fill={COLORS[i % COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<CustomTooltip currency={currency} />} />
           </PieChart>
         </ResponsiveContainer>
 
@@ -66,7 +66,7 @@ export default function CategoryPieChart({ data = [] }) {
                 <span className="text-xs text-muted-foreground">{cat.category}</span>
               </div>
               <span className="text-xs font-semibold text-foreground">
-                ${Number(cat.total).toLocaleString()}
+                {formatCurrency(cat.total, currency, false)}
               </span>
             </div>
           ))}

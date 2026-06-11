@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useWallets } from '../context/WalletContext';
 import { useDashboardData, useTransactions } from '../hooks/useDashboard';
+import { formatCurrency } from '../lib/utils';
 import StatCard from '../components/ui/StatCard';
 import BurnRateChart from '../components/ui/BurnRateChart';
 import CategoryPieChart from '../components/ui/CategoryPieChart';
@@ -28,7 +29,7 @@ export default function DashboardPage() {
   };
 
   const balance = summary?.balance || {};
-  const fmt = (n) => `$${Number(n || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+  const fmt = (n) => formatCurrency(n, activeWallet?.currency);
 
   if (!walletId) {
     return (
@@ -103,17 +104,17 @@ export default function DashboardPage() {
       {/* Charts Row */}
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <BurnRateChart data={summary?.trend || []} />
+          <BurnRateChart data={summary?.trend || []} currency={activeWallet?.currency} />
         </div>
         <div>
-          <CategoryPieChart data={summary?.categories || []} />
+          <CategoryPieChart data={summary?.categories || []} currency={activeWallet?.currency} />
         </div>
       </div>
 
       {/* Budget + Transactions */}
       <div className="grid gap-6 lg:grid-cols-3">
         <div>
-          <BudgetMeter budget={summary?.budget} />
+          <BudgetMeter budget={summary?.budget} currency={activeWallet?.currency} />
         </div>
         <div className="lg:col-span-2">
           <div className="rounded-xl border border-border bg-card p-5">
@@ -123,6 +124,7 @@ export default function DashboardPage() {
               pagination={pagination}
               loading={txLoading}
               onPageChange={(p) => fetchTransactions(p)}
+              currency={activeWallet?.currency}
             />
           </div>
         </div>

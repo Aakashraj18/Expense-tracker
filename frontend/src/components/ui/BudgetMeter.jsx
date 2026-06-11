@@ -1,6 +1,7 @@
-import { cn } from '../../lib/utils';
+import { AlertTriangle, CheckCircle2, Info } from 'lucide-react';
+import { cn, formatCurrency } from '../../lib/utils';
 
-export default function BudgetMeter({ budget }) {
+export default function BudgetMeter({ budget, currency = 'INR' }) {
   if (!budget || !budget.budget) {
     return (
       <div className="rounded-xl border border-border bg-card p-5">
@@ -43,27 +44,27 @@ export default function BudgetMeter({ budget }) {
       {/* Numbers */}
       <div className="flex items-center justify-between text-xs">
         <div>
-          <span className="font-semibold text-foreground">
-            ${Number(budget.spent).toLocaleString()}
-          </span>
-          <span className="text-muted-foreground"> spent</span>
+          <p className="text-[10px] text-muted-foreground uppercase">Spent</p>
+          <p className="text-sm font-semibold text-foreground">
+            {formatCurrency(budget.spent, currency)}
+          </p>
         </div>
         <div className="text-right">
-          <span className="text-muted-foreground">of </span>
-          <span className="font-semibold text-foreground">
-            ${Number(budget.budget).toLocaleString()}
-          </span>
+          <p className="text-[10px] text-muted-foreground uppercase">Budget</p>
+          <p className="text-sm font-semibold text-foreground">
+            {formatCurrency(budget.budget, currency)}
+          </p>
         </div>
       </div>
 
       {budget.remaining !== null && !isOver && (
-        <p className="mt-2 text-[11px] text-success">
-          ${Number(budget.remaining).toLocaleString()} remaining
+        <p className={cn("mt-4 text-xs font-medium", status.color)}>
+          {formatCurrency(budget.remaining, currency)} remaining
         </p>
       )}
       {isOver && (
-        <p className="mt-2 text-[11px] text-danger">
-          ${Number(Math.abs(budget.remaining)).toLocaleString()} over budget
+        <p className={cn("mt-4 text-xs font-medium", status.color)}>
+          {formatCurrency(Math.abs(budget.remaining), currency)} over budget
         </p>
       )}
     </div>

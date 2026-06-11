@@ -1,5 +1,5 @@
 import { ArrowUpRight, ArrowDownLeft, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { cn, formatCurrency } from '../../lib/utils';
 
 const typeConfig = {
   income:   { icon: ArrowDownLeft, color: 'text-success', bg: 'bg-success/10', label: '+' },
@@ -7,7 +7,7 @@ const typeConfig = {
   transfer: { icon: RefreshCw,    color: 'text-primary', bg: 'bg-primary/10', label: '↔' },
 };
 
-function TransactionRow({ tx }) {
+function TransactionRow({ tx, currency }) {
   const cfg = typeConfig[tx.type] || typeConfig.expense;
   const Icon = cfg.icon;
   const date = new Date(tx.date).toLocaleDateString('en-US', {
@@ -36,7 +36,7 @@ function TransactionRow({ tx }) {
       </div>
       <div className="text-right">
         <p className={cn('text-sm font-semibold', cfg.color)}>
-          {cfg.label}${Number(tx.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+          {cfg.label}{formatCurrency(Math.abs(tx.amount), currency || tx.currency)}
         </p>
         <p className="text-[10px] uppercase text-muted-foreground">{tx.currency}</p>
       </div>
@@ -44,7 +44,7 @@ function TransactionRow({ tx }) {
   );
 }
 
-export default function TransactionList({ transactions, pagination, onPageChange, loading }) {
+export default function TransactionList({ transactions, pagination, onPageChange, loading, currency }) {
   if (loading) {
     return (
       <div className="space-y-3">
@@ -74,7 +74,7 @@ export default function TransactionList({ transactions, pagination, onPageChange
     <div>
       <div className="divide-y divide-border">
         {transactions.map((tx) => (
-          <TransactionRow key={tx.id || tx._id} tx={tx} />
+          <TransactionRow key={tx.id || tx._id} tx={tx} currency={currency} />
         ))}
       </div>
 
