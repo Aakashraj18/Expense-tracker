@@ -62,6 +62,7 @@ exports.listWallets = async (req, res, next) => {
     const roleMap = Object.fromEntries(memberships.map((m) => [m.walletId.toString(), m.role]));
     const walletsWithRole = wallets.map((w) => ({
       ...w,
+      id: w._id.toString(),
       myRole: roleMap[w._id.toString()],
     }));
 

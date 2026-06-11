@@ -125,6 +125,11 @@ exports.listTransactions = async (req, res, next) => {
       Transaction.countDocuments(filter),
     ]);
 
+    const transactionsWithId = transactions.map((t) => ({
+      ...t,
+      id: t._id.toString(),
+    }));
+
     res.json({
       status: 'success',
       results: transactions.length,
@@ -134,7 +139,7 @@ exports.listTransactions = async (req, res, next) => {
         total,
         pages: Math.ceil(total / parseInt(limit)),
       },
-      data: { transactions },
+      data: { transactions: transactionsWithId },
     });
   } catch (err) {
     next(err);
