@@ -49,19 +49,19 @@ exports.listWallets = async (req, res, next) => {
       userId: req.user._id,
       tenantId: req.tenant._id,
       status: 'accepted',
-    }).select('walletId role');
+    }).select('walletId role').lean();
 
     const walletIds = memberships.map((m) => m.walletId);
 
     const wallets = await Wallet.find({
       _id: { $in: walletIds },
       isArchived: false,
-    }).sort({ createdAt: -1 });
+    }).sort({ createdAt: -1 }).lean();
 
     // Attach role to each wallet for convenience
     const roleMap = Object.fromEntries(memberships.map((m) => [m.walletId.toString(), m.role]));
     const walletsWithRole = wallets.map((w) => ({
-      ...w.toJSON(),
+      ...w,
       myRole: roleMap[w._id.toString()],
     }));
 

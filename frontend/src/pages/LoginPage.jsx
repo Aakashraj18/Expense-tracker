@@ -65,6 +65,7 @@ export default function LoginPage() {
                 placeholder="username@gmail.com"
                 className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted focus:border-primary"
                 required
+                autoComplete="username"
               />
             </div>
 
@@ -80,6 +81,7 @@ export default function LoginPage() {
                   placeholder="••••••••"
                   className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 pr-10 text-sm text-foreground outline-none transition-colors placeholder:text-muted focus:border-primary"
                   required
+                  autoComplete="current-password"
                 />
                 <button
                   type="button"

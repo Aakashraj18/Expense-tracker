@@ -120,7 +120,8 @@ exports.listTransactions = async (req, res, next) => {
         .sort(sort)
         .skip(skip)
         .limit(parseInt(limit))
-        .populate('createdBy', 'firstName lastName avatarUrl'),
+        .populate('createdBy', 'firstName lastName avatarUrl')
+        .lean(),
       Transaction.countDocuments(filter),
     ]);
 

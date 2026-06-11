@@ -32,7 +32,7 @@ module.exports = {
   mongo: {
     uri: process.env.MONGO_URI,
     options: {
-      maxPoolSize: 10,          // Connection pool for high concurrency
+      maxPoolSize: 100,         // Connection pool for high concurrency
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
     },
@@ -51,7 +51,7 @@ module.exports = {
 
   rateLimit: {
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 900000, // 15 min
-    max: parseInt(process.env.RATE_LIMIT_MAX, 10) || 100,
+    max: parseInt(process.env.RATE_LIMIT_MAX, 10) || 1000,
   },
 
   logging: {
