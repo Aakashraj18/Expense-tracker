@@ -35,14 +35,15 @@ const authenticate = async (req, res, next) => {
       return next(err);
     }
 
-    // ── 3. Ensure user still exists and is active ─────────────────────────
-    const user = await User.findById(decoded.sub).select('-refreshTokenHashes');
+    // ── 3 & 4. Ensure user and tenant exist and are active (Parallel) ────
+    const [user, tenant] = await Promise.all([
+      User.findById(decoded.sub).select('-refreshTokenHashes').lean(),
+      Tenant.findById(decoded.tenantId).lean()
+    ]);
+
     if (!user || !user.isActive) {
       return next(new AppError('User no longer exists or has been deactivated.', 401, 'USER_NOT_FOUND'));
     }
-
-    // ── 4. Ensure tenant is still active ──────────────────────────────────
-    const tenant = await Tenant.findById(decoded.tenantId);
     if (!tenant || !tenant.isActive) {
       return next(new AppError('Tenant account is inactive.', 401, 'TENANT_INACTIVE'));
     }
