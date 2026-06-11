@@ -69,12 +69,26 @@ const getRunningBalance = async (walletId, filters = {}) => {
         _id: null,
         totalIncome: {
           $sum: {
-            $cond: [{ $eq: ['$type', 'income'] }, { $multiply: ['$amount', '$exchangeRate'] }, 0],
+            $cond: [
+              { $or: [
+                { $eq: ['$type', 'income'] },
+                { $and: [{ $eq: ['$type', 'transfer'] }, { $eq: ['$subcategory', 'inbound'] }] }
+              ]},
+              { $multiply: ['$amount', '$exchangeRate'] },
+              0
+            ],
           },
         },
         totalExpenses: {
           $sum: {
-            $cond: [{ $eq: ['$type', 'expense'] }, { $multiply: ['$amount', '$exchangeRate'] }, 0],
+            $cond: [
+              { $or: [
+                { $eq: ['$type', 'expense'] },
+                { $and: [{ $eq: ['$type', 'transfer'] }, { $eq: ['$subcategory', 'outbound'] }] }
+              ]},
+              { $multiply: ['$amount', '$exchangeRate'] },
+              0
+            ],
           },
         },
         transactionCount: { $sum: 1 },

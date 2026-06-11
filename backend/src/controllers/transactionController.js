@@ -201,11 +201,23 @@ exports.createTransaction = [
         status: status || 'cleared',
       };
 
+      let txsToCreate = [txData];
+
+      if (type === 'transfer') {
+        txData.subcategory = 'outbound';
+        txsToCreate.push({
+          ...txData,
+          walletId: toWalletId,
+          toWalletId: req.wallet._id, // Point back to source
+          subcategory: 'inbound',
+        });
+      }
+
       // withSession falls back to no-session on standalone MongoDB
       const transaction = await withSession(async (session) => {
         const opts = session ? { session } : {};
-        const [tx] = await Transaction.create([txData], opts);
-        return tx;
+        const createdTxs = await Transaction.create(txsToCreate, opts);
+        return createdTxs[0];
       });
 
       logger.info(`[Transaction] Created: ${transaction._id} | wallet: ${req.wallet._id}`);

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import api from '../../lib/api';
+import { useWallets } from '../../context/WalletContext';
 
 const CATEGORIES = [
   'Salary', 'Freelance', 'Investment', 'Rent', 'Mortgage',
@@ -20,7 +21,9 @@ export default function AddTransactionModal({ walletId, onClose, onCreated }) {
     date: new Date().toISOString().split('T')[0],
     isRecurring: false,
     frequency: 'monthly',
+    toWalletId: '',
   });
+  const { wallets } = useWallets();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -28,6 +31,10 @@ export default function AddTransactionModal({ walletId, onClose, onCreated }) {
     e.preventDefault();
     if (!form.amount || !form.category) {
       setError('Amount and category are required');
+      return;
+    }
+    if (form.type === 'transfer' && !form.toWalletId) {
+      setError('Destination wallet is required for transfers');
       return;
     }
     setLoading(true);
@@ -40,6 +47,7 @@ export default function AddTransactionModal({ walletId, onClose, onCreated }) {
         description: form.description,
         merchant: form.merchant || undefined,
         date: new Date(form.date).toISOString(),
+        toWalletId: form.type === 'transfer' ? form.toWalletId : undefined,
       };
       if (form.isRecurring) {
         body.recurrence = { isRecurring: true, frequency: form.frequency };
@@ -131,6 +139,24 @@ export default function AddTransactionModal({ walletId, onClose, onCreated }) {
               {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
+
+          {/* To Wallet (only for transfers) */}
+          {form.type === 'transfer' && (
+            <div>
+              <label className="mb-1 block text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">To Wallet</label>
+              <select
+                value={form.toWalletId}
+                onChange={set('toWalletId')}
+                className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground outline-none transition-colors focus:border-primary"
+                required
+              >
+                <option value="">Select destination wallet...</option>
+                {(wallets || []).filter(w => w._id !== walletId && w.id !== walletId).map((w) => (
+                  <option key={w._id || w.id} value={w._id || w.id}>{w.name}</option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {/* Description + Merchant */}
           <div className="grid grid-cols-2 gap-3">

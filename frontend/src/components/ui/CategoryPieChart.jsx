@@ -7,7 +7,7 @@ const COLORS = [
   '#84cc16', '#14b8a6',
 ];
 
-const CustomTooltip = ({ active, payload }) => {
+const CustomTooltip = ({ active, payload, currency = 'INR' }) => {
   if (!active || !payload?.length) return null;
   const d = payload[0].payload;
   return (
