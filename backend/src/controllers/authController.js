@@ -111,7 +111,7 @@ exports.register = async (req, res, next) => {
       const [wallet] = await Wallet.create(
         [{ tenantId: req.tenant._id, ownerId: newUser._id,
            name: `${firstName}'s Wallet`, type: 'personal',
-           currency: preferences?.currency || 'USD' }],
+           currency: preferences?.currency || 'INR' }],
         opts
       );
 

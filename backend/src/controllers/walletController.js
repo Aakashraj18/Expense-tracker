@@ -82,7 +82,7 @@ exports.createWallet = async (req, res, next) => {
       const opts = session ? { session } : {};
       const [w] = await Wallet.create(
         [{ tenantId: req.tenant._id, ownerId: req.user._id, name, description,
-           currency: currency || 'USD', type: type || 'personal',
+           currency: currency || 'INR', type: type || 'personal',
            monthlyBudget: monthlyBudget || 0, color, icon }],
         opts
       );

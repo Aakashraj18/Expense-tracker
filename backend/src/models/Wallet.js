@@ -56,7 +56,7 @@ const walletSchema = new mongoose.Schema(
       uppercase: true,
       trim: true,
       maxlength: 3,
-      default: 'USD',
+      default: 'INR',
     },
 
     // Monthly budget cap (optional). 0 = no limit.
