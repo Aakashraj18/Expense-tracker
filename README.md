@@ -33,7 +33,6 @@ This repo is organized as a monorepo with separate frontend and backend applicat
 - Axios
 - Recharts
 - Socket.IO client
-- ESLint
 
 ### Backend
 
@@ -93,14 +92,6 @@ npm run dev
 - `frontend/src/components/` — reusable components and layout pieces
 - `frontend/src/pages/` — page-level route components
 - `frontend/src/context/` — React context providers for authentication and wallet state
-
-## Commit verification
-
-This repository uses GPG-signed commits to ensure commit authenticity. Verify signatures with:
-
-```bash
-git log --show-signature --oneline
-```
 
 ## Deployment
 
